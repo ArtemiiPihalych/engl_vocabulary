@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Vocabulary - Glass Edition</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <video autoplay muted loop id="bg-video">
+        <source src="background.mp4" type="video/mp4">
+    </video>
+
+    <div class="container">
+        <h1 class="glass-title">Vocabulary Quiz</h1>
+        
+        <!-- Стартовый экран с выбором режима -->
+        <div id="start-screen">
+            <p>Выберите режим обучения:</p>
+            <div class="mode-selection">
+                <button class="glass-btn mode-btn" data-mode="en-ru">ENG → RUS</button>
+                <button class="glass-btn mode-btn" data-mode="ru-en">RUS → ENG</button>
+            </div>
+        </div>
+
+        <!-- Экран теста -->
+        <div id="quiz-screen" class="hidden">
+            <div class="progress">Вопрос: <span id="current-index">1</span> / <span id="total-questions">26</span></div>
+            
+            <div class="word-card glass-card">
+                <h2 id="question-text">Word</h2>
+                <!-- Кнопка озвучки вопроса (видна только в режиме en-ru) -->
+                <button id="main-speak-btn" class="glass-btn small-btn">🔊 Прослушать</button>
+            </div>
+
+            <div id="options-container" class="options">
+                <!-- Варианты ответов будут здесь -->
+            </div>
+
+            <button id="next-btn" class="glass-btn hidden">Далее →</button>
+        </div>
+
+        <!-- Экран результатов -->
+        <div id="result-screen" class="hidden">
+            <h2>Тест завершен!</h2>
+            <p id="score-text"></p>
+            <button class="glass-btn" onclick="location.reload()">Начать заново</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+/* Подключаем шрифт Montserrat для современного вида */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Базовые настройки страницы */
+body, html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Убирает ненужные полосы прокрутки */
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Настройки видео-фона: всегда на весь экран без искажений */
+#bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover; /* Заполняет экран, сохраняя пропорции */
+    z-index: -100;
+}
+
+/* Главный контейнер с эффектом Glassmorphism (матовое стекло) */
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px); /* Размытие фона за стеклом */
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 40px;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+}
+
+/* Заголовки */
+.glass-title {
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.progress {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Карточка с текущим словом */
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+h2 {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+/* Общий стиль для основных стеклянных кнопок (Начать, Далее, Прослушать) */
+.glass-btn {
+    background: rgba(255, 107, 107, 0.4); /* Розоватый оттенок под цвет заката */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.glass-btn:hover {
+    background: rgba(255, 107, 107, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+}
+
+/* Уменьшенный вариант кнопки для функции "Прослушать" */
+.small-btn {
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+/* Сетка для вариантов ответов */
+.options {
+    display: grid;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* Кнопки вариантов ответов */
+.option-btn {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.option-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Стили при проверке ответа */
+.correct {
+    background: rgba(40, 167, 69, 0.5) !important; /* Зеленый "стеклянный" */
+    border-color: #28a745 !important;
+}
+
+.wrong {
+    background: rgba(220, 53, 69, 0.5) !important; /* Красный "стеклянный" */
+    border-color: #dc3545 !important;
+}
+
+.option-btn:disabled {
+    cursor: default;
+    opacity: 0.8;
+}
+
+/* Служебные классы */
+.hidden {
+    display: none !important;
+}
+
+/* Адаптация под маленькие экраны (телефоны) */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+        width: 95%;
+    }
+    
+    h2 {
+        font-size: 1.2rem;
+    }
+}
+
+.mode-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.mode-btn {
+    width: 100%;
+    margin: 0 !important;
+}
+
+/* Стили для кнопок-вариантов с иконкой звука */
+.option-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    text-align: left;
+}
+
+.mini-speak-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    transition: 0.2s;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.mini-speak-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.mini-speak-btn.playing {
+    animation: pulse 1s infinite;
+    background: rgba(255, 107, 107, 0.6);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
