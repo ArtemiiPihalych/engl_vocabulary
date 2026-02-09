@@ -1,3 +1,4 @@
+const backToMenuBtn = document.getElementById('back-to-menu-btn');
 const words = [
     { eng: "To behave in an unexpected and undesired way", rus: "Вести себя неожиданным и нежелательным образом" },
     { eng: "To remain hidden or dormant", rus: "Оставаться скрытым или бездействующим" },
@@ -166,3 +167,17 @@ function showResults() {
     document.getElementById('result-screen').classList.remove('hidden');
     document.getElementById('score-text').innerText = `Твой результат: ${score} из ${words.length}`;
 }
+
+backToMenuBtn.addEventListener('click', () => {
+    // Останавливаем озвучку, если она идет
+    window.speechSynthesis.cancel();
+    isSpeaking = false;
+
+    // Сбрасываем прогресс
+    currentIndex = 0;
+    score = 0;
+
+    // Переключаем экраны
+    document.getElementById('quiz-screen').classList.add('hidden');
+    document.getElementById('start-screen').classList.remove('hidden');
+});

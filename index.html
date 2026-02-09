@@ -27,18 +27,21 @@
         <!-- Экран теста -->
         <div id="quiz-screen" class="hidden">
             <div class="progress">Вопрос: <span id="current-index">1</span> / <span id="total-questions">26</span></div>
-            
+    
             <div class="word-card glass-card">
                 <h2 id="question-text">Word</h2>
-                <!-- Кнопка озвучки вопроса (видна только в режиме en-ru) -->
                 <button id="main-speak-btn" class="glass-btn small-btn">🔊 Прослушать</button>
             </div>
 
             <div id="options-container" class="options">
-                <!-- Варианты ответов будут здесь -->
+                <!-- Варианты ответов -->
             </div>
 
-            <button id="next-btn" class="glass-btn hidden">Далее →</button>
+            <!-- Контейнер для кнопок управления -->
+            <div class="quiz-controls">
+                <button id="next-btn" class="glass-btn hidden">Далее →</button>
+                <button id="back-to-menu-btn" class="glass-btn secondary-btn">Вернуться в меню</button>
+            </div>
         </div>
 
         <!-- Экран результатов -->
