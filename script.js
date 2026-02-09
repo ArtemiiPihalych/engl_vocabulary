@@ -1,40 +1,44 @@
-const backToMenuBtn = document.getElementById('back-to-menu-btn');
-const words = [
-    { eng: "To behave in an unexpected and undesired way", rus: "Вести себя неожиданным и нежелательным образом" },
-    { eng: "To remain hidden or dormant", rus: "Оставаться скрытым или бездействующим" },
-    { eng: "To press a particular combination of keys", rus: "Нажать определённую комбинацию клавиш" },
-    { eng: "Attachment", rus: "Вложение" },
-    { eng: "To attach to", rus: "Прикрепляться к" },
-    { eng: "A removable disk", rus: "Съёмный диск" },
-    { eng: "Relatively harmless", rus: "Относительно безвредный" },
-    { eng: "Computer environment", rus: "Компьютерная среда" },
-    { eng: "Their main goal is survival", rus: "Их главная цель - выживание" },
-    { eng: "Crypting decrypting engine", rus: "Шифрующий дешифрующий механизм" },
-    { eng: "Disguise", rus: "Маскировка" },
-    { eng: "To download from a network system", rus: "Скачивать из сетевой системы" },
-    { eng: "A response to the altitude of society", rus: "Реакция на отношение общества" },
-    { eng: "Reproducing program", rus: "Программа воспроизведения" },
-    { eng: "Destructive action", rus: "Разрушительное действие" },
-    { eng: "System halt", rus: "Остановка системы" },
-    { eng: "Contamination", rus: "Загрязнение (заражение)" },
-    { eng: "To restrict execution of destructive actions", rus: "Ограничить выполнение разрушительных действий" },
-    { eng: "To prevent", rus: "Предотвращать" },
-    { eng: "To wipe out hard disk", rus: "Стирать данные с жёсткого диска" },
-    { eng: "A cracked copy", rus: "Пиратская копия" },
-    { eng: "Criminal responsibility", rus: "Уголовная ответственность" },
-    { eng: "To bring profits", rus: "Приносить доход" },
-    { eng: "Double-dealing", rus: "Двойная сделка" },
-    { eng: "An antiviral protection", rus: "Антивирусная защита" },
-    { eng: "Remedy", rus: "Лечение, лекарство" }
+// Зашифрованные данные (Base64)
+const _data = [
+    { e: "To behave in an unexpected and undesired way", r: "0JLQtdGB0YLQuCDRgdC10LHRjyDQvdC10L7QttC40LTQsNC90L3Ri9C8INC4INC90LXQttC10LvQsNGC0LXQu9GM0L3Ri9C8INC+0LHRgNCw0LfQvtC8" },
+    { e: "To remain hidden or dormant", r: "0J7RgdGC0LDQstCw0YLRjNGB0Y8g0YHQutGA0YvRgtGL0Lwg0LjQu9C4INCx0LXQt9C00LXQudGB0YLQstGD0Y7RidC40Lw=" },
+    { e: "To press a particular combination of keys", r: "0J3QsNC20LDRgtGMINC+0L/RgNC10LTQtdC70ZHRgtC90YPRjiDQutC+0LzQsdC40L3QsNGG0QuNGOINC60LvQsNCy0LjRiA==" },
+    { e: "Attachment", r: "0JLQu9C+0LbQtdC90LjQtQ==" },
+    { e: "To attach to", r: "0J/RgNC40LrRgNC10L/Qu9GP0YLRjNGB0Y8g0Lo=" },
+    { e: "A removable disk", r: "0KHRitGR0LzQvdGL0Lkg0LTQuNGB0Lo=" },
+    { e: "Relatively harmless", r: "0J7RgtC90L7RgdC40YLQtdC70YzQvdC+INCx0LXQt9Cy0YDQtdC00L3Ri9C5" },
+    { e: "Computer environment", r: "0JrQvtC80L/RjNGO0YLQtdGA0L3QsNGPINGB0YDQtdC00LA=" },
+    { e: "Their main goal is survival", r: "0JjRhSDRgtC70LDQstC90DRRjyDRhtC10LvRjCDigJQg0LLRi9C20LjQstCw0L3QuNC1" },
+    { e: "Crypting/decrypting engine", r: "0KjQuNGE0YDRg9GO0YnQuNC5L9C00LXRiNC40YTRgNGD0Y7RidC40Lkg0LzQtdGF0LDQvdC40LfQvQ==" },
+    { e: "Disguise", r: "0JzQsNGB0LrQuNGA0L7QstC60LA=" },
+    { e: "To download from a network system", r: "0KHQutCw0YfQuNCy0LDRgtGMINC40Lcg0YHQtdGC0LXQstC+0Lkg0YHQuNGB0YLQtdC80Ys=" },
+    { e: "A response to the altitude of society", r: "0KDQtdCw0LrRhtC40Y8g0L3QsCDQvtGC0L3QvtGI0LXQvdC40LUg0L7QsdGJ0LXRgdGC0LLQsA==" },
+    { e: "Reproducing program", r: "0J/RgNC+0LPRgNCw0LzQvNCwINCy0L7RgdC/0YDQvtC40LfQstC10LTQtdC90LjRjw==" },
+    { e: "Destructive action", r: "0KDQsNC30YDRg9GI0LjRgtC10LvRjNC90L7QtSDQtNC10LnRgdGC0LLQuNC1" },
+    { e: "System halt", r: "0J7RgdGC0LDQvdC+0LLQutCwINGB0QuRgdGC0LXQvNGL" },
+    { e: "Contamination", r: "0JfQsNCz0YDRj9C30L3QtdC90QuQtSAo0LfQsNGA0LDQttC10L3QuNC1KQ==" },
+    { e: "To restrict execution of destructive actions", r: "0J7Qs9GA0LDQvdC40YfQuNGC0Ywg0LLRi9C/0L7Qu9C90LXQvdC40LUg0YDQsNC30YDRg9GI0LjRgtC10LvR0L3Ri9GFINC00LXQudGB0YLQstC40Lk=" },
+    { e: "To prevent", r: "0J/RgNC10LTQvtGC0LLRgNCw0YnQsNGC0Yw=" },
+    { e: "To wipe out hard disk", r: "0KHRgtC40YDQsNGC0Ywg0LTQsNC90L3Ri9C1INGBINC20ZHRgdGC0LrQvtCz0L4g0LTQuNGB0LrQsA==" },
+    { e: "A cracked copy", r: "0J/QuNGA0LDRgtGB0LrQsNGPINC60L7Qv9C40Y8=" },
+    { e: "Criminal responsibility", r: "0KPQs9C+0LvQvtCy0L3QsNGPINC+0YLQstC10YLRgdGC0LLQtdC90L3QvtGB0YLRjA==" },
+    { e: "To bring profits", r: "0J/RgNC40L3QvtGB0LjRgtGMINC00L7RhdC+0LQ=" },
+    { e: "Double-dealing", r: "0JTQstC+0LnQvdCw0Y8g0YHQvNC10LvQutCw" },
+    { e: "An antiviral protection", r: "0JDQvdGC0LjQstC40YDRg9GB0L3QsNGPINC30LDRidC40YLQsA==" },
+    { e: "Remedy", r: "0JvQtdGH0LXQvdC40LUsINC70LXQutCw0YDRgdGC0LLQvtA=" }
 ];
+
+// Функция декодирования UTF-8 из Base64
+const _d = (s) => decodeURIComponent(escape(atob(s)));
 
 let currentIndex = 0;
 let score = 0;
 let shuffledWords = [];
-let currentMode = 'en-ru'; // По умолчанию
-let isSpeaking = false; // Флаг для контроля озвучки
+let currentMode = 'en-ru';
+let isSpeaking = false;
 
-// Выбор режима и старт
+const backToMenuBtn = document.getElementById('back-to-menu-btn');
+
 document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         currentMode = btn.getAttribute('data-mode');
@@ -43,10 +47,10 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
 });
 
 function startQuiz() {
-    shuffledWords = [...words].sort(() => Math.random() - 0.5);
+    shuffledWords = [..._data].sort(() => Math.random() - 0.5);
     document.getElementById('start-screen').classList.add('hidden');
     document.getElementById('quiz-screen').classList.remove('hidden');
-    document.getElementById('total-questions').innerText = words.length;
+    document.getElementById('total-questions').innerText = _data.length;
     showQuestion();
 }
 
@@ -61,123 +65,102 @@ function showQuestion() {
     const currentWord = shuffledWords[currentIndex];
     const questionDisplay = document.getElementById('question-text');
 
-    // Настройка вопроса в зависимости от режима
     if (currentMode === 'en-ru') {
-        questionDisplay.innerText = currentWord.eng;
+        questionDisplay.innerText = currentWord.e;
         mainSpeakBtn.classList.remove('hidden');
     } else {
-        questionDisplay.innerText = currentWord.rus;
-        mainSpeakBtn.classList.add('hidden'); // Прячем общую озвучку, если вопрос на русском
+        questionDisplay.innerText = _d(currentWord.r);
+        mainSpeakBtn.classList.add('hidden');
     }
 
     document.getElementById('current-index').innerText = currentIndex + 1;
 
-    // Генерация вариантов
-    let correctValue = (currentMode === 'en-ru') ? currentWord.rus : currentWord.eng;
-    let options = [correctValue];
+    let correctVal = (currentMode === 'en-ru') ? _d(currentWord.r) : currentWord.e;
+    let options = [correctVal];
     
     while (options.length < 4) {
-        let randomWord = words[Math.floor(Math.random() * words.length)];
-        let randomValue = (currentMode === 'en-ru') ? randomWord.rus : randomWord.eng;
-        if (!options.includes(randomValue)) options.push(randomValue);
+        let rW = _data[Math.floor(Math.random() * _data.length)];
+        let rV = (currentMode === 'en-ru') ? _d(rW.r) : rW.e;
+        if (!options.includes(rV)) options.push(rV);
     }
     options.sort(() => Math.random() - 0.5);
 
-    options.forEach(optionText => {
+    options.forEach(opt => {
         const btn = document.createElement('button');
         btn.classList.add('option-btn');
-        
-        // Текст ответа
-        const textSpan = document.createElement('span');
-        textSpan.innerText = optionText;
-        btn.appendChild(textSpan);
+        const span = document.createElement('span');
+        span.innerText = opt;
+        btn.appendChild(span);
 
-        // Если ответы на английском — добавляем иконку звука
         if (currentMode === 'ru-en') {
-            const sBtn = document.createElement('div');
-            sBtn.innerHTML = '🔊';
-            sBtn.classList.add('mini-speak-btn');
-            sBtn.onclick = (e) => {
-                e.stopPropagation(); // Чтобы не засчитался ответ при клике на звук
-                speakText(optionText, sBtn);
-            };
-            btn.appendChild(sBtn);
+            const sB = document.createElement('div');
+            sB.innerHTML = '🔊';
+            sB.classList.add('mini-speak-btn');
+            sB.onclick = (e) => { e.stopPropagation(); speakText(opt, sB); };
+            btn.appendChild(sB);
         }
 
-        btn.onclick = () => checkAnswer(optionText, correctValue, btn);
+        btn.onclick = () => checkAnswer(opt, correctVal, btn);
         optionsContainer.appendChild(btn);
     });
 }
 
-function checkAnswer(selected, correct, btn) {
-    const allButtons = document.querySelectorAll('.option-btn');
-    allButtons.forEach(b => b.disabled = true);
+function checkAnswer(sel, cor, btn) {
+    const btns = document.querySelectorAll('.option-btn');
+    btns.forEach(b => b.disabled = true);
 
-    if (selected === correct) {
+    if (sel === cor) {
         btn.classList.add('correct');
         score++;
     } else {
         btn.classList.add('wrong');
-        allButtons.forEach(b => {
-            const val = b.querySelector('span').innerText;
-            if (val === correct) b.classList.add('correct');
+        btns.forEach(b => {
+            if (b.querySelector('span').innerText === cor) b.classList.add('correct');
         });
     }
     document.getElementById('next-btn').classList.remove('hidden');
 }
 
-// Универсальная функция озвучки
-function speakText(text, btnElement = null) {
-    if (isSpeaking) return; // Если уже говорит — игнорируем нажатие
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.9;
-
-    utterance.onstart = () => {
-        isSpeaking = true;
-        if (btnElement) btnElement.classList.add('playing');
-    };
-
-    utterance.onend = () => {
-        isSpeaking = false;
-        if (btnElement) btnElement.classList.remove('playing');
-    };
-
-    window.speechSynthesis.speak(utterance);
+function speakText(t, b = null) {
+    if (isSpeaking) return;
+    const u = new SpeechSynthesisUtterance(t);
+    u.lang = 'en-US';
+    u.onstart = () => { isSpeaking = true; if (b) b.classList.add('playing'); };
+    u.onend = () => { isSpeaking = false; if (b) b.classList.remove('playing'); };
+    window.speechSynthesis.speak(u);
 }
 
-// Озвучка главного вопроса (для режима en-ru)
 document.getElementById('main-speak-btn').addEventListener('click', function() {
-    const text = shuffledWords[currentIndex].eng;
-    speakText(text, this);
+    speakText(shuffledWords[currentIndex].e, this);
 });
 
 document.getElementById('next-btn').addEventListener('click', () => {
     currentIndex++;
-    if (currentIndex < shuffledWords.length) {
-        showQuestion();
-    } else {
-        showResults();
-    }
+    if (currentIndex < shuffledWords.length) showQuestion();
+    else showResults();
+});
+
+backToMenuBtn.addEventListener('click', () => {
+    window.speechSynthesis.cancel();
+    isSpeaking = false;
+    currentIndex = 0;
+    score = 0;
+    document.getElementById('quiz-screen').classList.add('hidden');
+    document.getElementById('start-screen').classList.remove('hidden');
 });
 
 function showResults() {
     document.getElementById('quiz-screen').classList.add('hidden');
     document.getElementById('result-screen').classList.remove('hidden');
-    document.getElementById('score-text').innerText = `Твой результат: ${score} из ${words.length}`;
+    document.getElementById('score-text').innerText = `Твой результат: ${score} из ${_data.length}`;
 }
 
-backToMenuBtn.addEventListener('click', () => {
-    // Останавливаем озвучку, если она идет
-    window.speechSynthesis.cancel();
-    isSpeaking = false;
+// Защита: отключаем правую кнопку мыши
+document.addEventListener('contextmenu', event => event.preventDefault());
 
-    // Сбрасываем прогресс
-    currentIndex = 0;
-    score = 0;
-
-    // Переключаем экраны
-    document.getElementById('quiz-screen').classList.add('hidden');
-    document.getElementById('start-screen').classList.remove('hidden');
-});
+// Защита: отключаем горячие клавиши F12, Ctrl+Shift+I и т.д.
+document.onkeydown = function(e) {
+    if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+        return false;
+    }
+};
