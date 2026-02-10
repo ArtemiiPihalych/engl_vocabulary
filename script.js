@@ -1,8 +1,8 @@
-// Зашифрованные данные (Base64)
+// Очищенные зашифрованные данные
 const _data = [
     { e: "To behave in an unexpected and undesired way", r: "0JLQtdGB0YLQuCDRgdC10LHRjyDQvdC10L7QttC40LTQsNC90L3Ri9C8INC4INC90LXQttC10LvQsNGC0LXQu9GM0L3Ri9C8INC+0LHRgNCw0LfQvtC8" },
     { e: "To remain hidden or dormant", r: "0J7RgdGC0LDQstCw0YLRjNGB0Y8g0YHQutGA0YvRgtGL0Lwg0LjQu9C4INCx0LXQt9C00LXQudGB0YLQstGD0Y7RidC40Lw=" },
-    { e: "To press a particular combination of keys", r: "0J3QsNC20LDRgtGMINC+0L/RgNC10LTQtdC70ZHRgtC90YPRjiDQutC+0LzQsdC40L3QsNGG0QuNGOINC60LvQsNCy0LjRiA==" },
+    { e: "To press a particular combination of keys", r: "0J3QsNC20LDRgtGMINC+0L/RgNC10LTQtdC70LXQvdC90YPRjiDQutC+0LzQsdC40L3QsNGG0QuNGOINC60LvQsNCy0LjRiA==" },
     { e: "Attachment", r: "0JLQu9C+0LbQtdC90LjQtQ==" },
     { e: "To attach to", r: "0J/RgNC40LrRgNC10L/Qu9GP0YLRjNGB0Y8g0Lo=" },
     { e: "A removable disk", r: "0KHRitGR0LzQvdGL0Lkg0LTQuNGB0Lo=" },
@@ -15,9 +15,9 @@ const _data = [
     { e: "A response to the altitude of society", r: "0KDQtdCw0LrRhtC40Y8g0L3QsCDQvtGC0L3QvtGI0LXQvdC40LUg0L7QsdGJ0LXRgdGC0LLQsA==" },
     { e: "Reproducing program", r: "0J/RgNC+0LPRgNCw0LzQvNCwINCy0L7RgdC/0YDQvtC40LfQstC10LTQtdC90LjRjw==" },
     { e: "Destructive action", r: "0KDQsNC30YDRg9GI0LjRgtC10LvRjNC90L7QtSDQtNC10LnRgdGC0LLQuNC1" },
-    { e: "System halt", r: "0J7RgdGC0LDQvdC+0LLQutCwINGB0QuRgdGC0LXQvNGL" },
-    { e: "Contamination", r: "0JfQsNCz0YDRj9C30L3QtdC90QuQtSAo0LfQsNGA0LDQttC10L3QuNC1KQ==" },
-    { e: "To restrict execution of destructive actions", r: "0J7Qs9GA0LDQvdC40YfQuNGC0Ywg0LLRi9C/0L7Qu9C90LXQvdC40LUg0YDQsNC30YDRg9GI0LjRgtC10LvR0L3Ri9GFINC00LXQudGB0YLQstC40Lk=" },
+    { e: "System halt", r: "0J7RgdGC0LDQvdC+0LLQutCwINGB0LjRgdGC0LXQvNGL" },
+    { e: "Contamination", r: "0JfQsNCz0YDRj9C30L3QtdC90LjQtSAo0LfQsNGA0LDQttC10L3QuNC1KQ==" },
+    { e: "To restrict execution of destructive actions", r: "0J7Qs9GA0LDQvdC40YfQuNGC0Ywg0LLRi9C/0L7Qu9C90LXQvdC40LUg0YDQsNC30YDRg9GI0LjRgtC10LvRjNC90YvRhSDRgdC40YHRgtC10LzQvdGL0YUg0LTQtNC50YHRgtCy0LjQuQ==" },
     { e: "To prevent", r: "0J/RgNC10LTQvtGC0LLRgNCw0YnQsNGC0Yw=" },
     { e: "To wipe out hard disk", r: "0KHRgtC40YDQsNGC0Ywg0LTQsNC90L3Ri9C1INGBINC20ZHRgdGC0LrQvtCz0L4g0LTQuNGB0LrQsA==" },
     { e: "A cracked copy", r: "0J/QuNGA0LDRgtGB0LrQsNGPINC60L7Qv9C40Y8=" },
@@ -28,8 +28,17 @@ const _data = [
     { e: "Remedy", r: "0JvQtdGH0LXQvdC40LUsINC70LXQutCw0YDRgdGC0LLQvtA=" }
 ];
 
-// Функция декодирования UTF-8 из Base64
-const _d = (s) => decodeURIComponent(escape(atob(s)));
+// Улучшенная функция декодирования с обработкой ошибок
+const _d = (s) => {
+    try {
+        // Убираем возможные пробелы и символы, которые могут сломать декодер
+        const cleanS = s.replace(/[^A-Za-z0-9+/=]/g, "");
+        return decodeURIComponent(escape(atob(cleanS)));
+    } catch (err) {
+        console.error("Ошибка декодирования:", s);
+        return "Ошибка данных";
+    }
+};
 
 let currentIndex = 0;
 let score = 0;
@@ -37,8 +46,22 @@ let shuffledWords = [];
 let currentMode = 'en-ru';
 let isSpeaking = false;
 
-const backToMenuBtn = document.getElementById('back-to-menu-btn');
+// Элементы интерфейса (кэшируем один раз)
+const UI = {
+    startScreen: document.getElementById('start-screen'),
+    quizScreen: document.getElementById('quiz-screen'),
+    resultScreen: document.getElementById('result-screen'),
+    questionText: document.getElementById('question-text'),
+    optionsContainer: document.getElementById('options-container'),
+    currentIndex: document.getElementById('current-index'),
+    totalQuestions: document.getElementById('total-questions'),
+    nextBtn: document.getElementById('next-btn'),
+    mainSpeakBtn: document.getElementById('main-speak-btn'),
+    scoreText: document.getElementById('score-text'),
+    backToMenuBtn: document.getElementById('back-to-menu-btn')
+};
 
+// Режимы
 document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         currentMode = btn.getAttribute('data-mode');
@@ -48,46 +71,48 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
 
 function startQuiz() {
     shuffledWords = [..._data].sort(() => Math.random() - 0.5);
-    document.getElementById('start-screen').classList.add('hidden');
-    document.getElementById('quiz-screen').classList.remove('hidden');
-    document.getElementById('total-questions').innerText = _data.length;
+    UI.startScreen.classList.add('hidden');
+    UI.quizScreen.classList.remove('hidden');
+    UI.totalQuestions.innerText = _data.length;
+    currentIndex = 0;
+    score = 0;
     showQuestion();
 }
 
 function showQuestion() {
-    const nextBtn = document.getElementById('next-btn');
-    const optionsContainer = document.getElementById('options-container');
-    const mainSpeakBtn = document.getElementById('main-speak-btn');
-    
-    nextBtn.classList.add('hidden');
-    optionsContainer.innerHTML = '';
+    UI.nextBtn.classList.add('hidden');
+    UI.optionsContainer.innerHTML = '';
     
     const currentWord = shuffledWords[currentIndex];
-    const questionDisplay = document.getElementById('question-text');
+    const rusTranslation = _d(currentWord.r);
 
     if (currentMode === 'en-ru') {
-        questionDisplay.innerText = currentWord.e;
-        mainSpeakBtn.classList.remove('hidden');
+        UI.questionText.innerText = currentWord.e;
+        UI.mainSpeakBtn.classList.remove('hidden');
     } else {
-        questionDisplay.innerText = _d(currentWord.r);
-        mainSpeakBtn.classList.add('hidden');
+        UI.questionText.innerText = rusTranslation;
+        UI.mainSpeakBtn.classList.add('hidden');
     }
 
-    document.getElementById('current-index').innerText = currentIndex + 1;
+    UI.currentIndex.innerText = currentIndex + 1;
 
-    let correctVal = (currentMode === 'en-ru') ? _d(currentWord.r) : currentWord.e;
+    let correctVal = (currentMode === 'en-ru') ? rusTranslation : currentWord.e;
     let options = [correctVal];
     
+    // Безопасная генерация вариантов
     while (options.length < 4) {
         let rW = _data[Math.floor(Math.random() * _data.length)];
         let rV = (currentMode === 'en-ru') ? _d(rW.r) : rW.e;
-        if (!options.includes(rV)) options.push(rV);
+        if (!options.includes(rV) && rV !== "Ошибка данных") {
+            options.push(rV);
+        }
     }
     options.sort(() => Math.random() - 0.5);
 
     options.forEach(opt => {
         const btn = document.createElement('button');
-        btn.classList.add('option-btn');
+        btn.className = 'option-btn';
+        
         const span = document.createElement('span');
         span.innerText = opt;
         btn.appendChild(span);
@@ -95,13 +120,13 @@ function showQuestion() {
         if (currentMode === 'ru-en') {
             const sB = document.createElement('div');
             sB.innerHTML = '🔊';
-            sB.classList.add('mini-speak-btn');
+            sB.className = 'mini-speak-btn';
             sB.onclick = (e) => { e.stopPropagation(); speakText(opt, sB); };
             btn.appendChild(sB);
         }
 
         btn.onclick = () => checkAnswer(opt, correctVal, btn);
-        optionsContainer.appendChild(btn);
+        UI.optionsContainer.appendChild(btn);
     });
 }
 
@@ -118,49 +143,47 @@ function checkAnswer(sel, cor, btn) {
             if (b.querySelector('span').innerText === cor) b.classList.add('correct');
         });
     }
-    document.getElementById('next-btn').classList.remove('hidden');
+    UI.nextBtn.classList.remove('hidden');
 }
 
 function speakText(t, b = null) {
-    if (isSpeaking) return;
+    if (isSpeaking || !t || t === "Ошибка данных") return;
     const u = new SpeechSynthesisUtterance(t);
     u.lang = 'en-US';
+    u.rate = 0.9;
     u.onstart = () => { isSpeaking = true; if (b) b.classList.add('playing'); };
     u.onend = () => { isSpeaking = false; if (b) b.classList.remove('playing'); };
+    u.onerror = () => { isSpeaking = false; if (b) b.classList.remove('playing'); };
     window.speechSynthesis.speak(u);
 }
 
-document.getElementById('main-speak-btn').addEventListener('click', function() {
+UI.mainSpeakBtn.addEventListener('click', function() {
     speakText(shuffledWords[currentIndex].e, this);
 });
 
-document.getElementById('next-btn').addEventListener('click', () => {
+UI.nextBtn.addEventListener('click', () => {
     currentIndex++;
     if (currentIndex < shuffledWords.length) showQuestion();
     else showResults();
 });
 
-backToMenuBtn.addEventListener('click', () => {
+UI.backToMenuBtn.addEventListener('click', () => {
     window.speechSynthesis.cancel();
     isSpeaking = false;
-    currentIndex = 0;
-    score = 0;
-    document.getElementById('quiz-screen').classList.add('hidden');
-    document.getElementById('start-screen').classList.remove('hidden');
+    UI.quizScreen.classList.add('hidden');
+    UI.startScreen.classList.remove('hidden');
 });
 
 function showResults() {
-    document.getElementById('quiz-screen').classList.add('hidden');
-    document.getElementById('result-screen').classList.remove('hidden');
-    document.getElementById('score-text').innerText = `Твой результат: ${score} из ${_data.length}`;
+    UI.quizScreen.classList.add('hidden');
+    UI.resultScreen.classList.remove('hidden');
+    UI.scoreText.innerText = `Твой результат: ${score} из ${_data.length}`;
 }
 
-// Защита: отключаем правую кнопку мыши
+// Защита от открытия консоли
 document.addEventListener('contextmenu', event => event.preventDefault());
-
-// Защита: отключаем горячие клавиши F12, Ctrl+Shift+I и т.д.
 document.onkeydown = function(e) {
-    if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+    if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) {
         return false;
     }
 };
